@@ -1,0 +1,17 @@
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Python
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+
+# Local data and vector database
+data/raw_pdfs/
+qdrant_data/
+
+# Local evaluation outputs
+results/

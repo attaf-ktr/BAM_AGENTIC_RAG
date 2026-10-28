@@ -1,0 +1,12 @@
+qdrant-client
+fastembed
+langgraph
+langchain-groq
+langchain-openai
+sentence-transformers
+ragas
+fastapi
+streamlit
+langfuse
+pymupdf
+python-dotenv
