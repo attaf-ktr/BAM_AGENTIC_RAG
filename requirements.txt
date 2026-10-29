@@ -10,3 +10,4 @@ streamlit
 langfuse
 pymupdf
 python-dotenv
+pytest
