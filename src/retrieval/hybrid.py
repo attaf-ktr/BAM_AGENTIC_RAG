@@ -1,5 +1,5 @@
 from collections import defaultdict
-
+from retrieval.fusion import reciprocal_rank_fusion
 from qdrant_client import QdrantClient, models
 from fastembed import TextEmbedding, SparseTextEmbedding
 
@@ -47,31 +47,11 @@ def hybrid_retrieve(
         with_payload=True,
     ).points
 
-    # Reciprocal Rank Fusion (RRF)
-    scores = defaultdict(float)
-    hit_by_id = {}
-
-    for hits in (dense_hits, sparse_hits):
-        for rank, hit in enumerate(hits, start=1):
-            scores[hit.id] += 1.0 / (60 + rank)
-            hit_by_id[hit.id] = hit
-
-    ranked_ids = sorted(scores, key=scores.get, reverse=True)
-
-    results = []
-    for point_id in ranked_ids[:limit]:
-        hit = hit_by_id[point_id]
-        payload = hit.payload or {}
-
-        results.append({
-            "id": hit.id,
-            "score": scores[point_id],
-            "text": payload.get("text", ""),
-            "source": payload.get("source", "Inconnu"),
-            "page": payload.get("page", "?"),
-        })
-
-    return results
+    return reciprocal_rank_fusion(
+        dense_hits,
+        sparse_hits,
+        limit=limit,
+    )
 
 
 if __name__ == "__main__":
